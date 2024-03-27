@@ -109,8 +109,10 @@ class ProdukController extends AdminController
     {
         $form = new Form(new Produk());
 
-        // $form->text('kode_produk', __('Kode produk'))->readonly();
-        $form->text('nama_produk', __('Nama produk'))->rules('required');
+        $form->hidden('kode_produk', __('Kode produk'))->readonly();
+        $form->text('nama_produk', __('Nama produk'))
+                ->creationRules(["required","unique:produk"])
+                ->updateRules(["required","unique:produk,nama_produk,{{id}}"]);
         $form->text('lebar', __('Lebar'));
         $form->select('satuan_lebar', __('Satuan Lebar'))->options(Satuan::orderBy('short', 'asc')->get()
                 ->pluck('short','short'));

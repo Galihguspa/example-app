@@ -43,8 +43,12 @@ class PartnerController extends AdminController
             return Provinsi::find($id_province)->name;
         })->sortable();
         $grid->column('phone', __('Phone'))->sortable();
-        $grid->column('customer', __('Pelanggan'))->sortable();
-        $grid->column('supplier', __('Pemasok'))->sortable();
+        $grid->column('customer', __('Pelanggan'))->display(function ($customer) {
+            return $customer[0]=='1' ? "Yes" : "NO";
+        })->sortable();
+        $grid->column('supplier', __('Pemasok'))->display(function ($supplier) {
+            return $supplier[0]=='1' ? "Yes" : "NO";
+        })->sortable();
 
         $grid->filter(function($filter){
             // Remove the default id filter
@@ -106,30 +110,30 @@ class PartnerController extends AdminController
     {
         $form = new Form(new Partner());
 
-        $form->text('name', __('Nama'))->rules('required');
-        // $form->text('id_province', __('Provinsi'));
-        $form->select('id_province', __('Provinsi'))->options(Provinsi::all()
+       $form->text('name', __('Nama'))->rules('required');
+        $form->select('id_province', __('Provinsi'))
+                ->options(Provinsi::all()
                     ->pluck('name', 'id'))
-                ->loads(['id_city'], [ '/partner/kabupaten_select'])->rules('required');
-        $form->select('id_city', __('Kota'))->rules('required')->value(request('id_city'));
-        $form->textarea('street', __('Street'))->rules('required');
+                ->loads(['id_city'], [ '/api/partner/kabupaten_select'])
+                ->rules('required');
+        $form->select('id_city', __('Kota'))
+            ->options(function ($id) {
+                return Kabupaten::where('id', $id)->pluck('name', 'id');
+            })->rules('required');
+        $form->textarea('street', __('Jalan'))->rules('required');
         $form->text('code_pos', __('Kode Pos'));
         $form->mobile('phone', __('No Hp'));
-        $form->email('email', __('Email'));
+        $form->email('email', __('Email'))
+                    ->creationRules(["unique:partner","nullable"])
+                ->updateRules(["unique:partner,email,{{id}}","nullable"]);
         $form->textarea('note', __('Keterangan'));
-        // $form->checkbox('customer', __('Pelanggan'))->options([1 => 'Yes']);
-        // $form->checkbox('supplier', __('Pemasok'))->options([1 => 'Yes']);
+        $form->checkbox('customer' ,__('Pelanggan'))->options([1 => 'Yes'])->stacked() ;
+        $form->checkbox('supplier', __('Pemasok'))->options([1 => 'Yes'])->stacked();
         
         $form->tools(function (Form\Tools $tools) { 
             // Disable `List` btn.view
             // $tools->disableList();
             $tools->disableView();
-        });
-
-        $form->saving(function (Form $form) {
-            // throws an exception
-            dd($form->supplier);
-            // $form->kode_produk = Produk::get_kode_produk();            
         });
 
         $form->footer(function ($footer) {
@@ -142,17 +146,8 @@ class PartnerController extends AdminController
 
         }); 
 
-
-
         return $form;
     }
 
-    public function kabupaten_select(Request $request)
-    {
-        $provinceId  = $request->get('q');
-        // $kabupaten = Kabupaten::where('provinsi_id',$kabupatenId)->get()->pluck('name', 'id');
-        // $kabupaten = Kabupaten::all()->pluck('name', 'id');
-        // $department = Department::where('id', '!=', $employee->department)->get()->pluck('name', 'id');
-        return Kabupaten::where('provinsi_id', $provinceId)->get(['id', DB::raw('name as text')]);
-    }
+   
 }

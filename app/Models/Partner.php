@@ -12,21 +12,19 @@ class Partner extends Model
     protected $table = 'partner';
     protected $primaryKey = 'id';
     
-    // public function getCustomerAttribute($customer)
-    // {
-    //     if (is_string($customer)) {
-    //         $customer = explode(',', $customer);
-    //     }
-
-    //     return $customer;
-    // }
+    public function getCustomerAttribute($customer)
+    {
+        if (is_string($customer)) {
+            $customer = explode(',', $customer);
+        }
+        return $customer;
+    }
 
     public function setCustomerAttribute($customer)
     {
         if (is_array($customer)) {
             $this->attributes['customer'] = implode(',', $customer);
         }
-
     }
 
     public function getSupplierAttribute($supplier)
@@ -34,16 +32,14 @@ class Partner extends Model
         if (is_string($supplier)) {
             $supplier = explode(',', $supplier);
         }
-
         return $supplier;
     }
 
-    public function setSupplierttribute($supplier)
+    public function setSupplierAttribute($supplier)
     {
         if (is_array($supplier)) {
             $this->attributes['supplier'] = implode(',', $supplier);
         }
-
     }
   
 }

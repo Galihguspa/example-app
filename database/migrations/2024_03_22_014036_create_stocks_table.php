@@ -13,9 +13,23 @@ class CreateStocksTable extends Migration
      */
     public function up()
     {
-        Schema::create('stocks', function (Blueprint $table) {
+        Schema::create('stock', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->dateTime('move_date');
+            $table->string('kode_produk');
+            $table->string('nama_produk');
+            $table->string('lot',50);
+            $table->double('qty',14,2)->default(0.00);
+            $table->string('satuan1',35);
+            $table->double('qty2',14,2)->nullable();
+            $table->string('satuan2',10)->nullable();
+            $table->string('lokasi',10);
+            $table->string('lokasi_rak',10)->nullable();
+            $table->string('gramasi',35)->nullable();
+            $table->string('finishing',35)->nullable();
+            $table->string('lebar_jadi',35)->nullable();
+            $table->string('satuan_lebar_jadi',35)->nullable();
         });
     }
 
@@ -26,6 +40,6 @@ class CreateStocksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('stocks');
+        Schema::dropIfExists('stock');
     }
 }
