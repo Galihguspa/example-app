@@ -22,7 +22,7 @@ return [
     | `img` tag, eg '<img src="http://logo-url" alt="Admin logo">'.
     |
     */
-    'logo' => '<b>Laravel</b> admin',
+    'logo' => '<b>Inventory</b>',
 
     /*
     |--------------------------------------------------------------------------
@@ -34,7 +34,7 @@ return [
     | '<img src="http://logo-url" alt="Admin logo">'.
     |
     */
-    'logo-mini' => '<b>La</b>',
+    'logo-mini' => '<b>Inv</b>',
 
     /*
     |--------------------------------------------------------------------------
@@ -58,7 +58,7 @@ return [
     */
     'route' => [
 
-        'prefix' => env('ADMIN_ROUTE_PREFIX', 'admin'),
+        'prefix' => env('ADMIN_ROUTE_PREFIX', '/'),
 
         'namespace' => 'App\\Admin\\Controllers',
 

@@ -7,6 +7,7 @@ use Encore\Admin\Controllers\Dashboard;
 use Encore\Admin\Layout\Column;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Layout\Row;
+use Encore\Admin\Widgets\MultipleSteps;
 
 class HomeController extends Controller
 {
@@ -30,5 +31,6 @@ class HomeController extends Controller
                     $column->append(Dashboard::dependencies());
                 });
             });
+            
     }
 }

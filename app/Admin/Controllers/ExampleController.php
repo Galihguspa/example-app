@@ -28,7 +28,14 @@ class ExampleController extends AdminController
         $grid->column('id', __('ID'))->sortable();
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
+        $grid->filter(function($filter){
+                // Remove the default id filter
+                $filter->disableIdFilter();
 
+                // Add a column filter
+                $filter->like('name', 'name');
+        });
+        
         return $grid;
     }
 
